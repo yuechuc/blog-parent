@@ -42,7 +42,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
 
         return ResponseResult.okResult(hotArticleVos);
     }
-    }
+
 }
 
 
