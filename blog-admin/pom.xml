@@ -9,4 +9,12 @@
     <artifactId>blog-admin</artifactId>
     <name>Archetype - blog-admin</name>
     <url>http://maven.apache.org</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.yuechu</groupId>
+            <artifactId>blog-framework</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
