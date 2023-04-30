@@ -21,3 +21,8 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       id-type: auto
+oss:
+  accessKey: 7qx2gys0-eteAdBW2Y7R2VDFNRVvN-oK6xXCApf3
+  secretKey: wOVg5-ORGvlppc_vnUJFV9q8QPty4vr63447tsrY
+  bucket: blog-yuechu
+  url: http://rty1o2x0f.hn-bkt.clouddn.com/
