@@ -16,11 +16,11 @@ import com.sangeng.vo.PageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.sangeng.domian.Comment;
-import org.springframework.util.StringUtils;
 
 
 import java.util.List;
 import java.util.Objects;
+
 
 /**
  * 评论表(Comment)表服务实现类
@@ -36,13 +36,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
     private UserService userService;
 
     @Override
-    public ResponseResult commentList(Long articleId, Integer pageNum, Integer pageSize) {
+    public ResponseResult commentList(String commentTpye, Long articleId, Integer pageNum, Integer pageSize) {
 
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper
-                .eq(Comment::getArticleId,articleId)
+                .eq(SystemConstants.COMMENT_ARTICLE.equals(commentTpye),Comment::getArticleId, articleId)
                 .eq(Comment::getRootId, SystemConstants.COMMENT_ROOT_ID)
-                .orderByDesc(Comment::getCreateTime);
+                .orderByDesc(Comment::getCreateTime)
+                //评论类型
+                .eq(Comment::getType,commentTpye);
 
         Page<Comment> page = new Page<>(pageNum, pageSize);
         Page<Comment> commentPage = this.page(page, queryWrapper);
@@ -67,6 +69,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         this.save(comment);
         return ResponseResult.okResult();
     }
+
+
 
 
     //根据根评论的id查询所对应的子评论的集合

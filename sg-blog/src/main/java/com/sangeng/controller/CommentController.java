@@ -1,5 +1,6 @@
 package com.sangeng.controller;
 
+import com.sangeng.constants.SystemConstants;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.CategoryService;
 import com.sangeng.service.CommentService;
@@ -17,11 +18,16 @@ public class CommentController {
     private CommentService commentService;
     @GetMapping("/commentList")
     public ResponseResult commentList(Long articleId, Integer pageNum,Integer pageSize){
-        return  commentService.commentList(articleId,pageNum,pageSize);
+        return  commentService.commentList(SystemConstants.COMMENT_ARTICLE,articleId,pageNum,pageSize);
     }
     @PostMapping
     public ResponseResult addComment(@RequestBody Comment comment){
         return  commentService.addComment(comment);
+    }
+
+    @GetMapping("/linkCommentList")
+    public ResponseResult linkCommentList(Integer pageNum,Integer pageSize){
+        return  commentService.commentList(SystemConstants.COMMENT_LINK,null,pageNum,pageSize);
     }
 
 
