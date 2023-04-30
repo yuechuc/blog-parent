@@ -14,6 +14,7 @@ import com.sangeng.service.ArticleService;
 import com.sangeng.mapper.ArticleMapper;
 import com.sangeng.service.CategoryService;
 import com.sangeng.utils.BeanCopyUtils;
+import com.sangeng.vo.ArticleDetailVo;
 import com.sangeng.vo.ArticleListVo;
 import com.sangeng.vo.HotArticleVo;
 import com.sangeng.vo.PageVo;
@@ -61,27 +62,42 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
 
     @Override
     public ResponseResult getArticleList(Integer pageNum, Integer pageSize, Long categoryId) {
+        //查询条件
         Page<Article> articlePage = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
-
+        // 如果 有categoryId 就要 查询时要和传入的相同
         queryWrapper.eq(Objects.nonNull(categoryId) && categoryId > 0, Article::getCategoryId, categoryId);
-
         queryWrapper.eq(Article::getStatus, ARTICLE_STATUS_NORMAL);
-
         queryWrapper.orderByDesc(Article::getIsTop).orderByDesc(Article::getUpdateTime);
         IPage<Article> page = this.page(articlePage, queryWrapper);
-
+        //查询categoryName
         List<Article> articles = page.getRecords();
         for (Article article : articles) {
             Category category = categoryService.getById(article.getCategoryId());
             article.setCategoryName(category.getName());
         }
-
+        //封装查询结果
         List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(articles, ArticleListVo.class);
 
 
         PageVo pageVo = new PageVo(articleListVos,page.getTotal());
         return ResponseResult.okResult(pageVo);
+    }
+
+    @Override
+    public ResponseResult getArticledetail(Long id) {
+        //根据id查询文章
+        Article article = getById(id);
+        //转换成VO
+        ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
+        //根据分类id查询分类名
+        Long categoryId = articleDetailVo.getCategoryId();
+        Category category = categoryService.getById(categoryId);
+        if(category!=null){
+            articleDetailVo.setCategoryName(category.getName());
+        }
+        //封装响应返回
+        return ResponseResult.okResult(articleDetailVo);
     }
 
 
