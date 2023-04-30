@@ -14,6 +14,7 @@ import com.sangeng.response.ResponseResult;
 public interface CommentService extends IService<Comment> {
 
 
-    ResponseResult getgetAllLink(Long articleId, Integer pageNum, Integer pageSize);
+
+    ResponseResult commentList(Long articleId, Integer pageNum, Integer pageSize);
 }
 

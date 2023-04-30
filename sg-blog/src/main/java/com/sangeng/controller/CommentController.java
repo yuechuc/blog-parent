@@ -18,6 +18,6 @@ public class CommentController {
     private CommentService commentService;
     @GetMapping("/commentList")
     public ResponseResult commentList(Long articleId, Integer pageNum,Integer pageSize){
-        return  commentService.getgetAllLink(articleId,pageNum,pageSize);
+        return  commentService.commentList(articleId,pageNum,pageSize);
     }
 }
