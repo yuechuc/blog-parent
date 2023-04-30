@@ -14,5 +14,6 @@ import com.sangeng.response.ResponseResult;
 public interface UserService extends IService<User> {
 
 
+    ResponseResult userInfo();
 }
 

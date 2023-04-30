@@ -8,7 +8,7 @@ import com.sangeng.utils.BeanCopyUtils;
 import com.sangeng.utils.JwtUtil;
 import com.sangeng.utils.RedisCache;
 import com.sangeng.vo.BlogUserLoginVo;
-import com.sangeng.vo.UserInfoVo;
+import com.sangeng.vo.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,9 +44,9 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         redisCache.setCacheObject(BLOG_LOGIN+userId,loginUser);
 
         //把User转换成UserInfoVo
-        UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfoVo.class);
+        UserInfo userInfo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfo.class);
         //把token和userinfo封装blogUserLoginVo返回
-        BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(token, userInfoVo);
+        BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(token, userInfo);
         return ResponseResult.okResult(blogUserLoginVo);
     }
 

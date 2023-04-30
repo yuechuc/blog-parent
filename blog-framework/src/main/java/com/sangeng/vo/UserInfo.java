@@ -7,16 +7,27 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoVo {
+public class UserInfo {
 
+    /**
+     * 主键
+     */
     private Long id;
-    //用户名
-    private String userName;
-    //昵称
+
+    /**
+     * 昵称
+     */
     private String nickName;
 
-    //用户性别（0男，1女，2未知）
+    /**
+     * 头像
+     */
+    private String avatar;
+
     private String sex;
-    //邮箱
+
     private String email;
+
+
+
 }
