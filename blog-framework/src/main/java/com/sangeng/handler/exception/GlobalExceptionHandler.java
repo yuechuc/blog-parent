@@ -1,4 +1,4 @@
-package com.sangeng.handler;
+package com.sangeng.handler.exception;
 
 import com.sangeng.enums.AppHttpCodeEnum;
 import com.sangeng.exception.SystemException;

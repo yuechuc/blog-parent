@@ -1,8 +1,8 @@
 package com.sangeng.config;
 
 import com.sangeng.filter.JwtAuthenticationTokenFilter;
-import com.sangeng.handler.AccessDeniedHandlerImpl;
-import com.sangeng.handler.AuthenticationEntryPointImpl;
+import com.sangeng.handler.security.AccessDeniedHandlerImpl;
+import com.sangeng.handler.security.AuthenticationEntryPointImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sangeng.constants.SystemConstants;
+import com.sangeng.enums.AppHttpCodeEnum;
+import com.sangeng.exception.SystemException;
 import com.sangeng.mapper.CommentMapper;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.CommentService;
@@ -14,9 +16,11 @@ import com.sangeng.vo.PageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.sangeng.domian.Comment;
+import org.springframework.util.StringUtils;
 
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 评论表(Comment)表服务实现类
@@ -38,7 +42,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         queryWrapper
                 .eq(Comment::getArticleId,articleId)
                 .eq(Comment::getRootId, SystemConstants.COMMENT_ROOT_ID)
-                .orderByAsc(Comment::getCreateTime);
+                .orderByDesc(Comment::getCreateTime);
 
         Page<Comment> page = new Page<>(pageNum, pageSize);
         Page<Comment> commentPage = this.page(page, queryWrapper);
@@ -55,14 +59,23 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         return ResponseResult.okResult(pageVo);
     }
 
+    @Override
+    public ResponseResult addComment(Comment comment) {
+        if (Objects.isNull(comment)){
+            throw new SystemException(AppHttpCodeEnum.CONTEXT_NOT_NULL);
+        }
+        this.save(comment);
+        return ResponseResult.okResult();
+    }
 
-   //根据根评论的id查询所对应的子评论的集合
+
+    //根据根评论的id查询所对应的子评论的集合
    //rootId 根评论的id
     private List<CommentVo> getChidren(Long rootId) {
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper
                 .eq(Comment::getRootId,rootId)
-                .orderByAsc(Comment::getCreateTime);
+                .orderByDesc(Comment::getCreateTime);
         List<Comment> list = this.list(queryWrapper);
         List<CommentVo> commentVos = toCommentVoList(list);
         return commentVos;

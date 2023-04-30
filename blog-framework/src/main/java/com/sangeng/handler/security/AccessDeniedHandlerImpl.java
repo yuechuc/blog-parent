@@ -1,4 +1,4 @@
-package com.sangeng.handler;
+package com.sangeng.handler.security;
 
 import com.alibaba.fastjson.JSON;
 import com.sangeng.enums.AppHttpCodeEnum;
