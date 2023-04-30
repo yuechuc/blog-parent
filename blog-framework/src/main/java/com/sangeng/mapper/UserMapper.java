@@ -2,6 +2,7 @@ package com.sangeng.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.sangeng.domian.User;
+import org.apache.ibatis.annotations.Mapper;
 
 
 /**
@@ -10,6 +11,7 @@ import com.sangeng.domian.User;
  * @author makejava
  * @since 2023-04-30 19:27:59
  */
+@Mapper
 public interface UserMapper extends BaseMapper<User> {
 
 }

@@ -15,7 +15,5 @@ import com.sangeng.domian.User;
 @Service("userService")
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
-
-
 }
 
