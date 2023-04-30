@@ -1,6 +1,8 @@
 package com.sangeng.config;
 
 import com.sangeng.filter.JwtAuthenticationTokenFilter;
+import com.sangeng.handler.AccessDeniedHandlerImpl;
+import com.sangeng.handler.AuthenticationEntryPointImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +26,10 @@ public class SecurityConfig  {
 
     @Autowired
     private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    @Autowired
+    private AccessDeniedHandlerImpl accessDeniedHandler;
+    @Autowired
+    private AuthenticationEntryPointImpl authenticationEntryPoint;
     //创建AuthenticationManager注入容器
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -50,12 +56,17 @@ public class SecurityConfig  {
                 .antMatchers("/link/getAllLink").authenticated()
                 // 除上面外的所有请求全部不需要认证即可访问
                 .anyRequest().permitAll();
-
+        //关闭默认的注销功能
         http.logout().disable();
         //允许跨域
         http.cors();
         //添加过滤器在UsernamePasswordAuthenticationFilter之前
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+        //配置异常处理器
+        http.exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .accessDeniedHandler(accessDeniedHandler);
         return http.build();
     }
 }

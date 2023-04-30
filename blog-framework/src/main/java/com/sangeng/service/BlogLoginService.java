@@ -5,4 +5,6 @@ import com.sangeng.domian.User;
 
 public interface BlogLoginService {
     ResponseResult login(User user);
+
+    ResponseResult logout();
 }
