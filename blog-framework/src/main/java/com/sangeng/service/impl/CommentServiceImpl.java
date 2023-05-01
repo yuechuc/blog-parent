@@ -28,7 +28,7 @@ import java.util.Objects;
  * @author makejava
  * @since 2023-04-30 22:46:57
  */
-@Service("commentService")
+@Service
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         implements CommentService {
 
@@ -47,8 +47,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
                 .eq(Comment::getType,commentTpye);
 
         Page<Comment> page = new Page<>(pageNum, pageSize);
-        Page<Comment> commentPage = this.page(page, queryWrapper);
-        List<Comment> comments = commentPage.getRecords();
+        Page<Comment> commentPage = page(page, queryWrapper);
+        List<Comment> records = commentPage.getRecords();
+        long total = commentPage.getTotal();
+
+        List<Comment> comments = records;
         List<CommentVo> commentVos =toCommentVoList(comments);
 
         //查询子评论
@@ -56,7 +59,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
             List<CommentVo> chidren = getChidren( commentVo.getRootId());
             commentVo.setChildren(chidren);
         }
-        PageVo pageVo = new PageVo(commentVos, commentPage.getTotal());
+        PageVo pageVo = new PageVo(commentVos, total);
 
         return ResponseResult.okResult(pageVo);
     }

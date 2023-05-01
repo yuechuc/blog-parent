@@ -1,6 +1,7 @@
 package com.sangeng.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sangeng.domain.dto.UserDto;
 import com.sangeng.domian.User;
 import com.sangeng.response.ResponseResult;
 
@@ -15,5 +16,9 @@ public interface UserService extends IService<User> {
 
 
     ResponseResult userInfo();
+
+    ResponseResult updateUserInfo(UserDto userDto);
+
+    ResponseResult register(User user);
 }
 

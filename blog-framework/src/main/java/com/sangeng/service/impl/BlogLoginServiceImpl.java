@@ -2,6 +2,8 @@ package com.sangeng.service.impl;
 
 import com.sangeng.domain.LoginUser;
 import com.sangeng.domian.User;
+import com.sangeng.enums.AppHttpCodeEnum;
+import com.sangeng.exception.SystemException;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.BlogLoginService;
 import com.sangeng.utils.BeanCopyUtils;
@@ -34,7 +36,7 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         //判断是否认证通过
         if (Objects.isNull(authenticate)) {
-            throw new RuntimeException("用户名或密码错误");
+            throw new SystemException(AppHttpCodeEnum.LOGIN_ERROR);
         }
         //获取userid 生成token
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();

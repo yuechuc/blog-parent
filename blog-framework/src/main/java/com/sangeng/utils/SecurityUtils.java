@@ -32,4 +32,5 @@ public class SecurityUtils
         return getLoginUser().getUser().getId();
     }
 
+
 }
