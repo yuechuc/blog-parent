@@ -29,7 +29,7 @@ public class CommentVo {
     private Long createBy;
 
     //评论创建人的nickName
-    private String userName;
+    private String username;
 
     private Date createTime;
 

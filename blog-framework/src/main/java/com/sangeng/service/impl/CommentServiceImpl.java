@@ -36,32 +36,32 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
     private UserService userService;
 
     @Override
-    public ResponseResult commentList(String commentTpye, Long articleId, Integer pageNum, Integer pageSize) {
-
+    public ResponseResult commentList(String commentType, Long articleId, Integer pageNum, Integer pageSize) {
+        //查询对应文章的根评论
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper
-                .eq(SystemConstants.COMMENT_ARTICLE.equals(commentTpye),Comment::getArticleId, articleId)
-                .eq(Comment::getRootId, SystemConstants.COMMENT_ROOT_ID)
-                .orderByDesc(Comment::getCreateTime)
-                //评论类型
-                .eq(Comment::getType,commentTpye);
+        //对articleId进行判断
+        queryWrapper.eq(SystemConstants.COMMENT_ARTICLE.equals(commentType),Comment::getArticleId,articleId);
+        //根评论 rootId为-1
+        queryWrapper.eq(Comment::getRootId,-1);
 
-        Page<Comment> page = new Page<>(pageNum, pageSize);
-        Page<Comment> commentPage = page(page, queryWrapper);
-        List<Comment> records = commentPage.getRecords();
-        long total = commentPage.getTotal();
+        //评论类型
+        queryWrapper.eq(Comment::getType,commentType);
 
-        List<Comment> comments = records;
-        List<CommentVo> commentVos =toCommentVoList(comments);
+        //分页查询
+        Page<Comment> page = new Page(pageNum,pageSize);
+        page(page,queryWrapper);
 
-        //查询子评论
-        for (CommentVo commentVo : commentVos) {
-            List<CommentVo> chidren = getChidren( commentVo.getRootId());
-            commentVo.setChildren(chidren);
+        List<CommentVo> commentVoList = toCommentVoList(page.getRecords());
+
+        //查询所有根评论对应的子评论集合，并且赋值给对应的属性
+        for (CommentVo commentVo : commentVoList) {
+            //查询对应的子评论
+            List<CommentVo> children = getChildren(commentVo.getId());
+            //赋值
+            commentVo.setChildren(children);
         }
-        PageVo pageVo = new PageVo(commentVos, total);
 
-        return ResponseResult.okResult(pageVo);
+        return ResponseResult.okResult(new PageVo(commentVoList,page.getTotal()));
     }
 
     @Override
@@ -78,7 +78,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
 
     //根据根评论的id查询所对应的子评论的集合
    //rootId 根评论的id
-    private List<CommentVo> getChidren(Long rootId) {
+    private List<CommentVo> getChildren(Long rootId) {
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper
                 .eq(Comment::getRootId,rootId)
@@ -109,7 +109,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
                     userService
                             .getById(commentVo.getCreateBy())
                             .getNickName();
-            commentVo.setUserName(nickName);
+            commentVo.setUsername(nickName);
         }
 
         return commentVos;
