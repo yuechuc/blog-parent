@@ -61,16 +61,12 @@ public class UploadServiceImpl implements UploadService{
 
         //默认不指定key的情况下，以文件内容的hash值作为文件名
         String key = filePath;
-
         try {
-            //huac
-            InputStream imgInputStream = img.getInputStream();
-
+            InputStream inputStream = img.getInputStream();
             Auth auth = Auth.create(accessKey, secretKey);
             String upToken = auth.uploadToken(bucket);
-
             try {
-                Response response = uploadManager.put(imgInputStream,key,upToken,null, null);
+                Response response = uploadManager.put(inputStream,key,upToken,null, null);
                 //解析上传成功的结果
                 DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
                 System.out.println(putRet.key);
@@ -85,10 +81,9 @@ public class UploadServiceImpl implements UploadService{
                     //ignore
                 }
             }
-        }  catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (Exception ex) {
+            //ignore
         }
-
         return "error";
     }
 }
