@@ -17,6 +17,11 @@ public class RedisCache
     @Autowired
     public RedisTemplate redisTemplate;
 
+
+    public void incrementCacheMapValue(String key,String hKey,int v){
+        redisTemplate.opsForHash().increment(key,hKey,v);
+    }
+
     /**
      * 缓存基本的对象，Integer、String、实体类等
      *

@@ -11,10 +11,11 @@ import com.sangeng.service.ArticleService;
 import com.sangeng.mapper.ArticleMapper;
 import com.sangeng.service.CategoryService;
 import com.sangeng.utils.BeanCopyUtils;
-import com.sangeng.vo.ArticleDetailVo;
-import com.sangeng.vo.ArticleListVo;
-import com.sangeng.vo.HotArticleVo;
-import com.sangeng.vo.PageVo;
+import com.sangeng.domain.vo.ArticleDetailVo;
+import com.sangeng.domain.vo.ArticleListVo;
+import com.sangeng.domain.vo.HotArticleVo;
+import com.sangeng.domain.vo.PageVo;
+import com.sangeng.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private RedisCache redisCache;
     @Override
     public ResponseResult getHotArticleList() {
         //查询热门文章 封装成ResponseResult返回
@@ -93,6 +96,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         }
         //封装响应返回
         return ResponseResult.okResult(articleDetailVo);
+    }
+
+    @Override
+    public ResponseResult updateViewCount(Long id) {
+        //更新redis中对应 id的浏览量
+        redisCache.incrementCacheMapValue("article:viewCount",id.toString(),1);
+        return ResponseResult.okResult();
     }
 
 

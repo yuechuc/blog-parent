@@ -26,3 +26,7 @@ oss:
   secretKey: wOVg5-ORGvlppc_vnUJFV9q8QPty4vr63447tsrY
   bucket: blog-yuechu
   url: http://rty1o2x0f.hn-bkt.clouddn.com/
+
+
+matching-stragety:
+  ant_path_matcher:

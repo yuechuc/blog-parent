@@ -10,7 +10,7 @@ import com.sangeng.mapper.UserMapper;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.UserService;
 import com.sangeng.utils.BeanCopyUtils;
-import com.sangeng.vo.UserInfo;
+import com.sangeng.domain.vo.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;

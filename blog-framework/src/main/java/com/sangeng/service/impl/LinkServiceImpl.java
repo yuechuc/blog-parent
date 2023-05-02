@@ -9,7 +9,7 @@ import com.sangeng.mapper.LinkMapper;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.LinkService;
 import com.sangeng.utils.BeanCopyUtils;
-import com.sangeng.vo.LinkVo;
+import com.sangeng.domain.vo.LinkVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

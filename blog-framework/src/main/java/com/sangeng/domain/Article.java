@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 文章表
@@ -12,6 +15,8 @@ import lombok.Data;
  */
 @TableName(value ="sg_article")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Article implements Serializable {
     /**
      * 
@@ -103,4 +108,9 @@ public class Article implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
+    public Article(Long id, long viewCount) {
+        this.id = id;
+        this.viewCount = viewCount;
+    }
 }

@@ -10,7 +10,7 @@ import com.sangeng.service.ArticleService;
 import com.sangeng.service.CategoryService;
 import com.sangeng.mapper.CategoryMapper;
 import com.sangeng.utils.BeanCopyUtils;
-import com.sangeng.vo.CategoryVo;
+import com.sangeng.domain.vo.CategoryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

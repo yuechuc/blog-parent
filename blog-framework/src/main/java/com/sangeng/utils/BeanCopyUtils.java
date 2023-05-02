@@ -1,7 +1,7 @@
 package com.sangeng.utils;
 
 import com.sangeng.domain.Article;
-import com.sangeng.vo.HotArticleVo;
+import com.sangeng.domain.vo.HotArticleVo;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
@@ -28,12 +28,5 @@ public class BeanCopyUtils {
                 .collect(Collectors.toList());
     }
 
-    public static void main(String[] args) {
-        Article article = new Article();
-        article.setId(1L);
-        article.setTitle("hello");
-        article.setViewCount(111L);
-        HotArticleVo hotArticleVo = copyBean(article, HotArticleVo.class);
-        System.out.println(hotArticleVo);
-    }
+
 }

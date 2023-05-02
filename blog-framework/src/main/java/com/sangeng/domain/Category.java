@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 分类表
@@ -12,6 +15,8 @@ import lombok.Data;
  */
 @TableName(value ="sg_category")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Category implements Serializable {
     /**
      * 
