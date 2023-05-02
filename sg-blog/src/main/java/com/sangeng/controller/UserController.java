@@ -1,5 +1,6 @@
 package com.sangeng.controller;
 
+import com.sangeng.annotation.SystemLog;
 import com.sangeng.domain.dto.UserDto;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.LinkService;
@@ -18,6 +19,7 @@ public class UserController {
         return  userService.userInfo();
     }
 
+    @SystemLog(bussinessName = "更新用户信息")
     @PutMapping("/userInfo")
     public ResponseResult updateUserInfo(@RequestBody UserDto userDto){
         return  userService.updateUserInfo(userDto);
