@@ -22,6 +22,7 @@ public class UpdateViewCountJob {
 
     @Autowired
     private ArticleService articleService;
+    //@Scheduled(cron = "0/5 * * * * ?")
     @Scheduled(cron = "* 0/10 * * * ?")
     public void updateViewCount() {
         //获取redis中浏览量数据
