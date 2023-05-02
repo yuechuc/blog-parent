@@ -1,6 +1,7 @@
 package com.sangeng.config;
 
 import com.sangeng.filter.JwtAuthenticationTokenFilter;
+import com.sangeng.handler.security.AuthenticationEntryPointImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,14 +14,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.sangeng.handler.security.AccessDeniedHandlerImpl ;
 
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig  {
-    //@Autowired
-    //private CustomUserDetailsService userDetailsService;
+    @Autowired
+    private AuthenticationEntryPointImpl authenticationEntryPoint;
 
+    @Autowired
+    private AccessDeniedHandlerImpl accessDeniedHandler;
 
     @Autowired
     private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
@@ -56,6 +60,9 @@ public class SecurityConfig  {
         http.cors();
         //添加过滤器在UsernamePasswordAuthenticationFilter之前
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler)
+                .authenticationEntryPoint(authenticationEntryPoint);
         return http.build();
     }
 }
