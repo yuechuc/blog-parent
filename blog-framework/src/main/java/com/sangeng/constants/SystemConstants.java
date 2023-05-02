@@ -14,5 +14,8 @@ public class SystemConstants
     public static final int Category_STATUS_DRAFT = 1;
     public static final String Category_STATUS_NORMAL = "0";
     public static final String LINK_STATUS_NORMAL = "0";
+    public static final Long COMMENT_ROOT_ID = -1L;
+    public static final String COMMENT_LINK = "1";
+    public static final String COMMENT_ARTICLE = "0";
 
 }

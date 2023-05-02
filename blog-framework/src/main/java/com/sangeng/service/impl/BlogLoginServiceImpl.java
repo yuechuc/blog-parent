@@ -2,13 +2,15 @@ package com.sangeng.service.impl;
 
 import com.sangeng.domain.LoginUser;
 import com.sangeng.domian.User;
+import com.sangeng.enums.AppHttpCodeEnum;
+import com.sangeng.exception.SystemException;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.BlogLoginService;
 import com.sangeng.utils.BeanCopyUtils;
 import com.sangeng.utils.JwtUtil;
 import com.sangeng.utils.RedisCache;
 import com.sangeng.vo.BlogUserLoginVo;
-import com.sangeng.vo.UserInfoVo;
+import com.sangeng.vo.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,7 +36,7 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         //判断是否认证通过
         if (Objects.isNull(authenticate)) {
-            throw new RuntimeException("用户名或密码错误");
+            throw new SystemException(AppHttpCodeEnum.LOGIN_ERROR);
         }
         //获取userid 生成token
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
@@ -44,9 +46,9 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         redisCache.setCacheObject(BLOG_LOGIN+userId,loginUser);
 
         //把User转换成UserInfoVo
-        UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfoVo.class);
+        UserInfo userInfo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfo.class);
         //把token和userinfo封装blogUserLoginVo返回
-        BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(token, userInfoVo);
+        BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(token, userInfo);
         return ResponseResult.okResult(blogUserLoginVo);
     }
 

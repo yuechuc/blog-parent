@@ -1,14 +1,11 @@
 package com.sangeng.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.sangeng.constants.SystemConstants;
 import com.sangeng.domain.Article;
 import com.sangeng.domain.Category;
-import com.sangeng.mapper.CategoryMapper;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.ArticleService;
 import com.sangeng.mapper.ArticleMapper;
@@ -20,10 +17,8 @@ import com.sangeng.vo.HotArticleVo;
 import com.sangeng.vo.PageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 

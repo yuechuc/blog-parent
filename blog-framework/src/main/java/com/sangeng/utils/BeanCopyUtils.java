@@ -2,7 +2,6 @@ package com.sangeng.utils;
 
 import com.sangeng.domain.Article;
 import com.sangeng.vo.HotArticleVo;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
