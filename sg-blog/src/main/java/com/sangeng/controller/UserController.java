@@ -3,11 +3,10 @@ package com.sangeng.controller;
 import com.sangeng.annotation.SystemLog;
 import com.sangeng.domain.dto.UserDto;
 import com.sangeng.response.ResponseResult;
-import com.sangeng.service.LinkService;
 import com.sangeng.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.sangeng.domian.User;
+import com.sangeng.domain.User;
 
 @RestController
 @RequestMapping("/user")

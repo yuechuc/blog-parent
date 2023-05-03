@@ -1,7 +1,7 @@
 package com.sangeng.service.impl;
 
 import com.sangeng.domain.LoginUser;
-import com.sangeng.domian.User;
+import com.sangeng.domain.User;
 import com.sangeng.enums.AppHttpCodeEnum;
 import com.sangeng.exception.SystemException;
 import com.sangeng.response.ResponseResult;
