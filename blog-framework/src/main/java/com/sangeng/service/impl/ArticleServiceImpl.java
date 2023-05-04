@@ -175,6 +175,37 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         return ResponseResult.okResult(adminArticleDto);
     }
 
+    @Transactional
+    @Override
+    public ResponseResult updateArticle(AdminArticleDto adminArticleDto) {
+        List<Integer> tags = adminArticleDto.getTags();
+
+        Article article = BeanCopyUtils.copyBean(adminArticleDto, Article.class);
+        articleService.updateById(article);
+
+        //先删除关联表
+        LambdaQueryWrapper<ArticleTag> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ArticleTag::getArticleId,article.getId());
+        articleTagService.remove(queryWrapper);
+
+        for (Integer tag : tags) {
+            ArticleTag articleTag = new ArticleTag(Math.toIntExact(adminArticleDto.getId()), tag);
+            //检查是否存在
+            if (!existsArticleTag(articleTag)){
+                articleTagService.save(articleTag);
+            }
+        }
+        return ResponseResult.okResult();
+    }
+
+
+    public boolean existsArticleTag(ArticleTag articleTag) {
+        LambdaQueryWrapper<ArticleTag> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ArticleTag::getArticleId, articleTag.getArticleId())
+                .eq(ArticleTag::getTagId, articleTag.getTagId());
+        return articleTagService.getOne(wrapper) != null;
+    }
+
 
 }
 

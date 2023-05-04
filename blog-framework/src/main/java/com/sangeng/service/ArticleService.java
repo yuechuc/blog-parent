@@ -3,6 +3,7 @@ package com.sangeng.service;
 import com.sangeng.domain.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sangeng.domain.dto.ArticleDto;
+import com.sangeng.domain.vo.adminVo.AdminArticleDto;
 import com.sangeng.response.ResponseResult;
 
 /**
@@ -26,4 +27,6 @@ public interface ArticleService extends IService<Article> {
     ResponseResult list(Integer pageNum, Integer pageSize, ArticleDto articleDto);
 
     ResponseResult selectById(Long id);
+
+    ResponseResult updateArticle(AdminArticleDto adminArticleDto);
 }
