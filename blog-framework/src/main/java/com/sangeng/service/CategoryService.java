@@ -12,4 +12,6 @@ import com.sangeng.response.ResponseResult;
 public interface CategoryService extends IService<Category> {
 
     ResponseResult getCategoryList();
+
+    ResponseResult listAllCategory();
 }

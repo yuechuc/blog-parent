@@ -15,5 +15,7 @@ import com.sangeng.response.ResponseResult;
 public interface TagService extends IService<Tag> {
 
     ResponseResult pageTagList(Integer pageNum, Integer pageSize, TagDto tagListDto);
+
+    ResponseResult listAllTag();
 }
 

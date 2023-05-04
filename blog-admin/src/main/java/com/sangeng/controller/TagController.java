@@ -62,6 +62,10 @@ public class TagController {
         }
     }
 
+    @GetMapping("/listAllTag")
+    public ResponseResult listAllTag(){
+        return tagService.listAllTag();
+    }
 
 }
 

@@ -6,10 +6,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sangeng.constants.RedisKey;
 import com.sangeng.domain.Article;
+import com.sangeng.domain.ArticleTag;
 import com.sangeng.domain.Category;
+import com.sangeng.domain.dto.ArticleDto;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.ArticleService;
 import com.sangeng.mapper.ArticleMapper;
+import com.sangeng.service.ArticleTagService;
 import com.sangeng.service.CategoryService;
 import com.sangeng.utils.BeanCopyUtils;
 import com.sangeng.domain.vo.ArticleDetailVo;
@@ -19,6 +22,7 @@ import com.sangeng.domain.vo.PageVo;
 import com.sangeng.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
@@ -37,6 +41,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ArticleTagService articleTagService;
 
     @Autowired
     private RedisCache redisCache;
@@ -106,6 +113,23 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
     public ResponseResult updateViewCount(Long id) {
         //更新redis中对应 id的浏览量
         redisCache.incrementCacheMapValue(RedisKey.ARTICLE_VIEWCOUNT,id.toString(),1);
+        return ResponseResult.okResult();
+    }
+
+    @Transactional
+    @Override
+    public ResponseResult addArticle(ArticleDto articleDto) {
+        Article article = BeanCopyUtils.copyBean(articleDto, Article.class);
+        this.save(article);
+
+        List<Integer> tags = articleDto.getTags();
+        for (Integer tag : tags) {
+            ArticleTag articleTag = new ArticleTag();
+            articleTag.setArticleId(Math.toIntExact(article.getId()));
+            articleTag.setTagId(tag);
+            articleTagService.save(articleTag);
+        }
+
         return ResponseResult.okResult();
     }
 

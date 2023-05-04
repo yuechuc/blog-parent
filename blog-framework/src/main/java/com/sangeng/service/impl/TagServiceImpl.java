@@ -5,12 +5,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sangeng.domain.dto.TagDto;
 import com.sangeng.domain.vo.PageVo;
+import com.sangeng.domain.vo.TagVo;
 import com.sangeng.mapper.TagMapper;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.TagService;
+import com.sangeng.utils.BeanCopyUtils;
 import org.springframework.stereotype.Service;
 import com.sangeng.domain.Tag;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 /**
  * 标签(Tag)表服务实现类
@@ -33,6 +37,13 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
 
         PageVo pageVo = new PageVo(tagPage.getRecords(), tagPage.getTotal());
         return ResponseResult.okResult(pageVo);
+    }
+
+    @Override
+    public ResponseResult listAllTag() {
+        List<Tag> list = this.list(null);
+        List<TagVo> tagVos = BeanCopyUtils.copyBeanList(list, TagVo.class);
+        return ResponseResult.okResult(tagVos);
     }
 }
 

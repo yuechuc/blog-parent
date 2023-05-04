@@ -20,11 +20,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 @TableName("sg_article_tag")
 public class ArticleTag  {
     //文章id@TableId
-    private Long articleId;
+    private Integer articleId;
     //标签id@TableId
-    private Long tagId;
-
-
+    private Integer tagId;
 
 
 }

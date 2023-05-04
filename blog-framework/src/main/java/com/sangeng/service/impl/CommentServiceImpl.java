@@ -69,6 +69,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         if (Objects.isNull(comment)){
             throw new SystemException(AppHttpCodeEnum.CONTEXT_NOT_NULL);
         }
+
         this.save(comment);
         return ResponseResult.okResult();
     }
