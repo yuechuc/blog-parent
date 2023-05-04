@@ -7,12 +7,17 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
+
 @SuppressWarnings("serial")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginUser implements UserDetails {
     private User user;
+    private List<String> permissions;
+
+    //不使用这个方法获取权限
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
