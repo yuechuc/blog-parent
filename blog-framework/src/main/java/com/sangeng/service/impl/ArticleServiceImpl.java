@@ -9,24 +9,27 @@ import com.sangeng.domain.Article;
 import com.sangeng.domain.ArticleTag;
 import com.sangeng.domain.Category;
 import com.sangeng.domain.dto.ArticleDto;
+import com.sangeng.domain.vo.*;
+import com.sangeng.domain.vo.adminVo.AdminArticleDto;
+import com.sangeng.domain.vo.adminVo.AdminArticleListVo;
+import com.sangeng.enums.AppHttpCodeEnum;
+import com.sangeng.exception.SystemException;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.ArticleService;
 import com.sangeng.mapper.ArticleMapper;
 import com.sangeng.service.ArticleTagService;
 import com.sangeng.service.CategoryService;
 import com.sangeng.utils.BeanCopyUtils;
-import com.sangeng.domain.vo.ArticleDetailVo;
-import com.sangeng.domain.vo.ArticleListVo;
-import com.sangeng.domain.vo.HotArticleVo;
-import com.sangeng.domain.vo.PageVo;
 import com.sangeng.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.sangeng.constants.SystemConstants.ARTICLE_STATUS_NORMAL;
 
@@ -44,6 +47,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
 
     @Autowired
     private ArticleTagService articleTagService;
+
+    @Autowired
+    private ArticleService articleService;
 
     @Autowired
     private RedisCache redisCache;
@@ -131,6 +137,42 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         }
 
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult list(Integer pageNum, Integer pageSize, ArticleDto articleDto) {
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .like(StringUtils.hasText(articleDto.getTitle()),Article::getTitle,articleDto.getTitle())
+                .like(StringUtils.hasText(articleDto.getSummary()),Article::getSummary,articleDto.getSummary())
+                .orderByDesc(Article::getUpdateTime);
+        Page<Article> page = new Page<>(pageNum, pageSize);
+
+        Page<Article> articlePage = articleService.page(page, queryWrapper);
+
+        List<AdminArticleListVo> adminArticleListVos = BeanCopyUtils.copyBeanList(articlePage.getRecords(), AdminArticleListVo.class);
+        PageVo pageVo = new PageVo(adminArticleListVos, articlePage.getTotal());
+        return ResponseResult.okResult(pageVo);
+    }
+
+    @Override
+    public ResponseResult selectById(Long id) {
+        if (Objects.isNull(id)){
+            throw new SystemException(AppHttpCodeEnum.OPERATION_ERROR);
+        }
+        Article article = articleService.getById(id);
+
+        LambdaQueryWrapper<ArticleTag> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ArticleTag::getArticleId,id);
+        List<ArticleTag> articleTagList = articleTagService.list(queryWrapper);
+        List<Integer> tagList = articleTagList.stream()
+                .map(ArticleTag::getTagId)
+                .collect(Collectors.toList());
+
+        AdminArticleDto adminArticleDto = BeanCopyUtils.copyBean(article, AdminArticleDto.class);
+        adminArticleDto.setTags(tagList);
+
+        return ResponseResult.okResult(adminArticleDto);
     }
 
 

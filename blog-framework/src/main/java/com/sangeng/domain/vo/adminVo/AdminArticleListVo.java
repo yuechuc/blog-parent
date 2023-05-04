@@ -1,19 +1,16 @@
-package com.sangeng.domain.dto;
+package com.sangeng.domain.vo.adminVo;
 
-import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class ArticleDto implements Serializable {
+@AllArgsConstructor
+public class AdminArticleListVo {
 
     private String title;
     private String content;
@@ -23,5 +20,8 @@ public class ArticleDto implements Serializable {
     private String isTop;
     private String status;
     private String isComment;
-    List<Integer> tags;
+    private Long id;
+    private Date createTime;
+    private Long viewCount;
+
 }
