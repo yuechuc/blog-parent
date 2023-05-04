@@ -9,6 +9,7 @@ import com.sangeng.response.ResponseResult;
 import com.sangeng.service.SystemLoginService;
 import com.sangeng.utils.JwtUtil;
 import com.sangeng.utils.RedisCache;
+import com.sangeng.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -45,5 +46,12 @@ public class SystemLoginServiceImpl implements SystemLoginService {
         map.put("token", token);
 
         return ResponseResult.okResult(map);
+    }
+
+    @Override
+    public ResponseResult logout() {
+        Long userId = SecurityUtils.getUserId();
+        redisCache.deleteObject(RedisKey.ADMIN_LOGIN+userId);
+        return ResponseResult.okResult();
     }
 }

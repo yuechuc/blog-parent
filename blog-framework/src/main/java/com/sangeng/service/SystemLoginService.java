@@ -5,4 +5,6 @@ import com.sangeng.response.ResponseResult;
 
 public interface SystemLoginService {
     ResponseResult login(User user);
+
+    ResponseResult logout();
 }
