@@ -17,5 +17,8 @@ public class SystemConstants
     public static final Long COMMENT_ROOT_ID = -1L;
     public static final String COMMENT_LINK = "1";
     public static final String COMMENT_ARTICLE = "0";
+    public static final String MENU = "C";
+    public static final String BUTTON = "F";
+    public static final String STATUS_NORMAL = "0";
 
 }

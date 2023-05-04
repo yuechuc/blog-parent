@@ -36,7 +36,6 @@ public class SystemLoginServiceImpl implements SystemLoginService {
             throw new SystemException(AppHttpCodeEnum.LOGIN_ERROR);
         }
 
-
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         Long userId = loginUser.getUser().getId();
         String token = JwtUtil.createJWT(String.valueOf(userId));

@@ -2,6 +2,9 @@ package com.sangeng.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sangeng.domain.Menu;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -12,5 +15,8 @@ import com.sangeng.domain.Menu;
  */
 public interface MenuService extends IService<Menu> {
 
+    List<String> selectPermsByUserId(@Param("userId") Long userId);
+
+    List<Menu> selectRouterMenuTreeByUserId(Long userId);
 }
 

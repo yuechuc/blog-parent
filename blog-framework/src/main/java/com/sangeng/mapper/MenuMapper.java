@@ -2,6 +2,9 @@ package com.sangeng.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.sangeng.domain.Menu;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 
 /**
@@ -10,7 +13,13 @@ import com.sangeng.domain.Menu;
  * @author makejava
  * @since 2023-05-03 11:00:00
  */
+@Mapper
 public interface MenuMapper extends BaseMapper<Menu> {
 
+    List<String> selectPermsByUserId(Long userId);
+
+    List<Menu> selectAllRouterMenu();
+
+    List<Menu> selectRouterMenuTreeByUserId(Long userId);
 }
 
