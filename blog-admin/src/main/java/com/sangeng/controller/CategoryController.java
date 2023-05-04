@@ -40,7 +40,10 @@ public class CategoryController {
 
             List<ExcelCategoryVo> excelCategoryVos = BeanCopyUtils.copyBeanList(categoryVos, ExcelCategoryVo.class);
             //把数据写入到Excel中
-            EasyExcel.write(response.getOutputStream(), ExcelCategoryVo.class).autoCloseStream(Boolean.FALSE).sheet("分类导出")
+            EasyExcel
+                    .write(response.getOutputStream(), ExcelCategoryVo.class)
+                    .autoCloseStream(Boolean.FALSE)
+                    .sheet("分类导出")
                     .doWrite(excelCategoryVos);
 
         } catch (Exception e) {
