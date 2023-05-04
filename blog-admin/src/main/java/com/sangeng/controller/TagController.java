@@ -1,5 +1,6 @@
 package com.sangeng.controller;
 
+import com.sangeng.domain.dto.TagDto;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,8 @@ public class TagController {
     private TagService tagService;
 
     @GetMapping("/list")
-    public ResponseResult list(){
-        return ResponseResult.okResult(tagService.list());
+        public ResponseResult list(Integer pageNum, Integer pageSize, TagDto tagListDto){
+        return tagService.pageTagList(pageNum,pageSize,tagListDto);
     }
 }
 
