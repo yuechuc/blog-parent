@@ -128,10 +128,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         Article article = BeanCopyUtils.copyBean(articleDto, Article.class);
         this.save(article);
 
-        List<Integer> tags = articleDto.getTags();
-        for (Integer tag : tags) {
+        List<String> tags = articleDto.getTags();
+        for (String tag : tags) {
             ArticleTag articleTag = new ArticleTag();
-            articleTag.setArticleId(Math.toIntExact(article.getId()));
+            articleTag.setArticleId(article.getId());
             articleTag.setTagId(tag);
             articleTagService.save(articleTag);
         }
@@ -165,7 +165,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         LambdaQueryWrapper<ArticleTag> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ArticleTag::getArticleId,id);
         List<ArticleTag> articleTagList = articleTagService.list(queryWrapper);
-        List<Integer> tagList = articleTagList.stream()
+        List<String> tagList = articleTagList.stream()
                 .map(ArticleTag::getTagId)
                 .collect(Collectors.toList());
 
@@ -178,7 +178,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
     @Transactional
     @Override
     public ResponseResult updateArticle(AdminArticleDto adminArticleDto) {
-        List<Integer> tags = adminArticleDto.getTags();
+        List<String> tags = adminArticleDto.getTags();
 
         Article article = BeanCopyUtils.copyBean(adminArticleDto, Article.class);
         articleService.updateById(article);
@@ -188,8 +188,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         queryWrapper.eq(ArticleTag::getArticleId,article.getId());
         articleTagService.remove(queryWrapper);
 
-        for (Integer tag : tags) {
-            ArticleTag articleTag = new ArticleTag(Math.toIntExact(adminArticleDto.getId()), tag);
+        for (String tag : tags) {
+            ArticleTag articleTag = new ArticleTag(adminArticleDto.getId(), tag);
             //检查是否存在
             if (!existsArticleTag(articleTag)){
                 articleTagService.save(articleTag);

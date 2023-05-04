@@ -31,5 +31,5 @@ public class AdminArticleDto implements Serializable {
     private Date updateTime;
     private Integer delFlag;
     private Long viewCount;
-    List<Integer> tags;
+    List<String> tags;
 }

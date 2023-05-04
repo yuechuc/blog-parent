@@ -23,5 +23,5 @@ public class ArticleDto implements Serializable {
     private String isTop;
     private String status;
     private String isComment;
-    List<Integer> tags;
+    List<String> tags;
 }
