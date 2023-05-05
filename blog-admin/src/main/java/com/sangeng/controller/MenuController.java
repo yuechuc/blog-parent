@@ -1,5 +1,6 @@
 package com.sangeng.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.sangeng.domain.Menu;
 import com.sangeng.domain.vo.adminVo.AdminMenuVo;
 import com.sangeng.enums.AppHttpCodeEnum;
@@ -9,8 +10,10 @@ import com.sangeng.service.MenuService;
 import com.sangeng.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -59,6 +62,27 @@ public class MenuController {
             return ResponseResult.okResult();
         }else {
             throw new SystemException(AppHttpCodeEnum.OPERATION_ERROR);
+        }
+    }
+
+
+
+    //逻辑删除文章
+    @Transactional
+    @DeleteMapping("/{menuId}")
+    public ResponseResult removeById(@PathVariable Long menuId){
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Menu::getParentId,menuId);
+        List<Menu> menuList = menuService.list(queryWrapper);
+        if (menuList == null){
+            if (StringUtils.hasText(String.valueOf(menuId))){
+                menuService.removeById(menuId);
+                return ResponseResult.okResult();
+            }else {
+                throw new SystemException(AppHttpCodeEnum.OPERATION_ERROR);
+            }
+        }else {
+            throw new SystemException(AppHttpCodeEnum.CHILDREN_NOT_NULL);
         }
     }
 
