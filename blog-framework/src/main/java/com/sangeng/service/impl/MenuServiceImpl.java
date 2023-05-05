@@ -3,12 +3,16 @@ package com.sangeng.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sangeng.domain.Menu;
+import com.sangeng.domain.vo.adminVo.AdminMenuVo;
 import com.sangeng.mapper.MenuMapper;
+import com.sangeng.response.ResponseResult;
 import com.sangeng.service.MenuService;
+import com.sangeng.utils.BeanCopyUtils;
 import com.sangeng.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.sangeng.constants.SystemConstants;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,6 +59,27 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         List<Menu> menuTree = builderMenuTree(menus,0L);
 
         return menuTree;
+    }
+
+    @Override
+    public ResponseResult listAllMenu(String status, String menuName) {
+       /*
+        需要展示菜单列表，不需要分页。
+        可以针对菜单名进行模糊查询
+        也可以针对菜单的状态进行查询。
+        菜单要按照父菜单id和orderNum进行排序
+        */
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+
+        queryWrapper
+                .like(StringUtils.hasText(status),Menu::getStatus,status)
+                .like(StringUtils.hasText(menuName),Menu::getMenuName,menuName)
+                .orderByDesc(Menu::getParentId,Menu::getOrderNum);
+
+        List<Menu> menus = this.list(queryWrapper);
+        List<AdminMenuVo> menuVos = BeanCopyUtils.copyBeanList(menus, AdminMenuVo.class);
+
+        return ResponseResult.okResult(menuVos);
     }
 
     //建立菜单树
