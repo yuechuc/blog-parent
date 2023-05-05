@@ -7,6 +7,7 @@ import com.sangeng.constants.SystemConstants;
 import com.sangeng.domain.Article;
 import com.sangeng.domain.Menu;
 import com.sangeng.domain.Role;
+import com.sangeng.domain.RoleMenu;
 import com.sangeng.domain.dto.ArticleDto;
 import com.sangeng.domain.dto.RoleDto;
 import com.sangeng.domain.vo.PageVo;
@@ -15,9 +16,11 @@ import com.sangeng.domain.vo.adminVo.RoleVo;
 import com.sangeng.enums.AppHttpCodeEnum;
 import com.sangeng.mapper.RoleMapper;
 import com.sangeng.response.ResponseResult;
+import com.sangeng.service.RoleMenuService;
 import com.sangeng.service.RoleService;
 import com.sangeng.utils.BeanCopyUtils;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -35,6 +38,8 @@ import java.util.stream.Collectors;
 @Service("roleService")
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
+    @Autowired
+    private RoleMenuService roleMenuService;
     @Override
     public List<String> selectRoleKeyByUserId(Long id) {
         //判断是否是管理员 如果是返回集合中只需要有admin
@@ -78,9 +83,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Role role = BeanCopyUtils.copyBean(roleDto, Role.class);
         save(role);
         List<Long> menuIds = roleDto.getMenuIds();
-        //if (menuIds != null && menuIds.size() > 0) {
-        //    baseMapper.insertRoleMenu(menuIds, role.getId());
-        //}
+
+        if (menuIds != null && menuIds.size() > 0) {
+            for (Long menuId : menuIds) {
+               roleMenuService.save(new RoleMenu(role.getId(),menuId));
+            }
+        }
         return ResponseResult.okResult();
     }
 
