@@ -32,5 +32,7 @@ public interface UserService extends IService<User> {
     UpdateUserVo getUserInfoById(Long id);
 
     ResponseResult updateUser(AdminUserDto userDto);
+
+    ResponseResult changeStatus(String status, Long id);
 }
 

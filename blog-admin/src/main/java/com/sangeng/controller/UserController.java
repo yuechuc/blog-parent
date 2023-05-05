@@ -3,10 +3,7 @@ package com.sangeng.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.sangeng.domain.Tag;
 import com.sangeng.domain.User;
-import com.sangeng.domain.dto.AdminUserDto;
-import com.sangeng.domain.dto.ArticleDto;
-import com.sangeng.domain.dto.TagDto;
-import com.sangeng.domain.dto.UserDto;
+import com.sangeng.domain.dto.*;
 import com.sangeng.domain.vo.adminVo.RoleVo;
 import com.sangeng.domain.vo.adminVo.SimpleRoleVo;
 import com.sangeng.domain.vo.adminVo.UpdateUserVo;
@@ -59,5 +56,12 @@ public class UserController {
     @PutMapping
     public ResponseResult updateUserInfo(@RequestBody AdminUserDto userDto) {
         return userService.updateUser(userDto);
+    }
+
+
+    @PutMapping("/changeStatus")
+    public ResponseResult changeStatus(@RequestBody UserSatusDto userSatusDto) {
+        userSatusDto.setId(userSatusDto.getUserId());
+        return userService.changeStatus(userSatusDto.getStatus(), userSatusDto.getId());
     }
 }

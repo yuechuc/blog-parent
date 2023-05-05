@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sangeng.domain.LoginUser;
+import com.sangeng.domain.Role;
 import com.sangeng.domain.UserRole;
 import com.sangeng.domain.dto.AdminUserDto;
 import com.sangeng.domain.dto.UserDto;
@@ -31,6 +32,7 @@ import com.sangeng.domain.User;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 用户表(User)表服务实现类
@@ -195,6 +197,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         for (Long roleId : roleIds) {
             userRoleService.save(new UserRole(user.getId(),roleId));
         }
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult changeStatus(String status, Long id) {
+        User user = getById(id);
+        if (Objects.isNull(user)) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.USER_NOT_EXIT);
+        }
+        user.setStatus(status);
+        updateById(user);
         return ResponseResult.okResult();
     }
 
