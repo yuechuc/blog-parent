@@ -22,4 +22,5 @@ public class SystemConstants
     public static final String STATUS_NORMAL = "0";
 
     public static final String ADMAIN = "1";
+    public static final Long MENT_PARENT_ID = 0L;
 }

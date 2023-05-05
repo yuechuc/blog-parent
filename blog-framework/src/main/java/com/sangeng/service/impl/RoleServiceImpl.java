@@ -8,6 +8,7 @@ import com.sangeng.domain.Article;
 import com.sangeng.domain.Menu;
 import com.sangeng.domain.Role;
 import com.sangeng.domain.dto.ArticleDto;
+import com.sangeng.domain.dto.RoleDto;
 import com.sangeng.domain.vo.PageVo;
 import com.sangeng.domain.vo.adminVo.AdminArticleListVo;
 import com.sangeng.domain.vo.adminVo.RoleVo;
@@ -68,6 +69,18 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
         role.setStatus(status);
         updateById(role);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult addRole(RoleDto roleDto) {
+
+        Role role = BeanCopyUtils.copyBean(roleDto, Role.class);
+        save(role);
+        List<Long> menuIds = roleDto.getMenuIds();
+        //if (menuIds != null && menuIds.size() > 0) {
+        //    baseMapper.insertRoleMenu(menuIds, role.getId());
+        //}
         return ResponseResult.okResult();
     }
 

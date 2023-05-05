@@ -86,4 +86,10 @@ public class MenuController {
         }
     }
 
+    @GetMapping("/treeselect")
+    public ResponseResult treeselect(){
+
+        return menuService.treeselect();
+    }
+
 }

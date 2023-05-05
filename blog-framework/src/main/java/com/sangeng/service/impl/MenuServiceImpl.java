@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sangeng.domain.Menu;
 import com.sangeng.domain.vo.adminVo.AdminMenuVo;
+import com.sangeng.domain.vo.adminVo.MenuTreeVo;
 import com.sangeng.mapper.MenuMapper;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.MenuService;
@@ -15,6 +16,7 @@ import com.sangeng.constants.SystemConstants;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -82,6 +84,22 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         return ResponseResult.okResult(menuVos);
     }
 
+    @Override
+    public ResponseResult treeselect() {
+        List<Menu> list = list();
+        List<MenuTreeVo> menuTreeVos = list.stream()
+                .map(menu -> {
+                    MenuTreeVo simpleMenuVo = new MenuTreeVo();
+                    simpleMenuVo.setId(menu.getId());
+                    simpleMenuVo.setLabel(menu.getMenuName());
+                    simpleMenuVo.setParentId(menu.getParentId());
+                    return simpleMenuVo;
+                })
+                .collect(Collectors.toList());
+        List<MenuTreeVo> menuTree = buildMenuTree(menuTreeVos);
+        return ResponseResult.okResult(menuTree);
+    }
+
     //建立菜单树
     private List<Menu> builderMenuTree(List<Menu> menus, long parentId) {
         List<Menu> menuList = menus.stream()
@@ -99,6 +117,26 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 .collect(Collectors.toList());
         return childrenLis;
 
+    }
+
+    private <T extends MenuTreeVo> List<T> buildMenuTree(List<T> menuList) {
+        return menuList.stream()
+                //过滤出父菜单
+                .filter(menuVo -> Objects.equals(menuVo.getParentId(), 0L))
+                //把该结点作为父结点，查找该结点的子结点并赋值
+                .peek(menuVo -> menuVo.setChildren(getChild(menuVo.getId(), menuList)))
+                //返回结果
+                .collect(Collectors.toList());
+    }
+
+    //获取子菜单
+    private <T extends MenuTreeVo> List<T> getChild(Long id, List<T> menuList) {
+        return menuList.stream()
+                //过滤出该父节点的子节点
+                .filter(menuVo -> Objects.equals(menuVo.getParentId(), id))
+                //把该子结点作为父结点，递归查找出该子节点的的子结点并赋值
+                .peek(childrenMenuVo -> childrenMenuVo.setChildren(getChild(childrenMenuVo.getId(), menuList)))
+                .collect(Collectors.toList());
     }
 }
 

@@ -1,5 +1,6 @@
 package com.sangeng.domain.vo;
 
+import com.sangeng.domain.vo.adminVo.MenuTreeVo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenuVo {
+public class MenuVo  {
 
     List<MenuVo> children;
     private String component;
