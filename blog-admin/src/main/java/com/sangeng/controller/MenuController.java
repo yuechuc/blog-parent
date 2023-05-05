@@ -1,8 +1,11 @@
 package com.sangeng.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.sangeng.constants.SystemConstants;
 import com.sangeng.domain.Menu;
 import com.sangeng.domain.vo.adminVo.AdminMenuVo;
+import com.sangeng.domain.vo.adminVo.MenuIdVo;
+import com.sangeng.domain.vo.adminVo.MenuTreeVo;
 import com.sangeng.enums.AppHttpCodeEnum;
 import com.sangeng.exception.SystemException;
 import com.sangeng.response.ResponseResult;
@@ -88,8 +91,14 @@ public class MenuController {
 
     @GetMapping("/treeselect")
     public ResponseResult treeselect(){
-
         return menuService.treeselect();
+    }
+    @GetMapping("/roleMenuTreeselect/{id}")
+    public ResponseResult<MenuIdVo> selectTreeByRoleId(@PathVariable Long id) {
+        List<Long> longs = menuService.selectMenuIdsByRoleId(id);
+        List<MenuTreeVo> menuTreeVos= (List<MenuTreeVo>) menuService.treeselect().getData();
+        MenuIdVo menuIdVo = new MenuIdVo(longs, menuTreeVos);
+        return ResponseResult.okResult(menuIdVo);
     }
 
 }

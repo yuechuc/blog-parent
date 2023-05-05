@@ -2,6 +2,7 @@ package com.sangeng.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sangeng.domain.Menu;
+import com.sangeng.domain.vo.adminVo.MenuTreeVo;
 import com.sangeng.response.ResponseResult;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,5 +24,9 @@ public interface MenuService extends IService<Menu> {
     ResponseResult listAllMenu(String status, String menuName);
 
     ResponseResult treeselect();
+
+    List<Long> selectMenuIdsByRoleId(Long id);
+
+
 }
 

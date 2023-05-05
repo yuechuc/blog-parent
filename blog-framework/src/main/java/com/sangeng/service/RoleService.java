@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.sangeng.domain.Role;
 import com.sangeng.domain.dto.ArticleDto;
 import com.sangeng.domain.dto.RoleDto;
+import com.sangeng.domain.vo.adminVo.RoleVo;
 import com.sangeng.response.ResponseResult;
 
 import java.util.List;
@@ -24,5 +25,9 @@ public interface RoleService extends IService<Role> {
     ResponseResult changeStatus(Long roleId, String status);
 
     ResponseResult addRole(RoleDto roleDto);
+
+    ResponseResult<RoleVo> getRoleById(Long id);
+
+    ResponseResult updateRole(RoleDto roleDto);
 }
 

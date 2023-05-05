@@ -100,6 +100,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         return ResponseResult.okResult(menuTree);
     }
 
+    @Override
+    public List<Long> selectMenuIdsByRoleId(Long id) {
+        return baseMapper.selectMenuIdsByRoleId(id);
+    }
+
     //建立菜单树
     private List<Menu> builderMenuTree(List<Menu> menus, long parentId) {
         List<Menu> menuList = menus.stream()

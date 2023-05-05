@@ -22,6 +22,7 @@ import com.sangeng.utils.BeanCopyUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -40,10 +41,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Autowired
     private RoleMenuService roleMenuService;
+
     @Override
     public List<String> selectRoleKeyByUserId(Long id) {
         //判断是否是管理员 如果是返回集合中只需要有admin
-        if(id == 1L){
+        if (id == 1L) {
             List<String> roleKeys = new ArrayList<>();
             roleKeys.add("admin");
             return roleKeys;
@@ -55,11 +57,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public ResponseResult getRoleListByPage(Integer pageNum, Integer pageSize, String roleName, String status) {
         LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(Strings.isNotEmpty(roleName),Role::getRoleName, roleName)
-                .eq(Strings.isNotEmpty(status),Role::getStatus, status)
+        queryWrapper.like(Strings.isNotEmpty(roleName), Role::getRoleName, roleName)
+                .eq(Strings.isNotEmpty(status), Role::getStatus, status)
                 .orderByAsc(Role::getRoleSort);
         Page<Role> pageObj = new Page<>(pageNum, pageSize);
-        pageObj=page(pageObj,queryWrapper);
+        pageObj = page(pageObj, queryWrapper);
         List<Role> roleList = pageObj.getRecords();
         List<RoleVo> roleVoList = BeanCopyUtils.copyBeanList(roleList, RoleVo.class);
         PageVo pageVo = new PageVo(roleVoList, pageObj.getTotal());
@@ -86,8 +88,40 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
         if (menuIds != null && menuIds.size() > 0) {
             for (Long menuId : menuIds) {
-               roleMenuService.save(new RoleMenu(role.getId(),menuId));
+                roleMenuService.save(new RoleMenu(role.getId(), menuId));
             }
+        }
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult<RoleVo> getRoleById(Long id) {
+        Role role = getById(id);
+        if (Objects.isNull(role)) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.ROLE_NOT_EXIT);
+        }
+        RoleVo roleVo = BeanCopyUtils.copyBean(role, RoleVo.class);
+        return ResponseResult.okResult(roleVo);
+    }
+
+    @Transactional
+    @Override
+    public ResponseResult updateRole(RoleDto roleDto) {
+        Role role = BeanCopyUtils.copyBean(roleDto, Role.class);
+        updateById(role);
+        List<Long> menuIds = roleDto.getMenuIds();
+        if (menuIds != null && menuIds.size() > 0) {
+            //baseMapper.deleteRoleMenuByRoleId(role.getId());
+            //baseMapper.insertRoleMenu(menuIds, role.getId());
+            LambdaQueryWrapper<RoleMenu> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(RoleMenu::getRoleId, role.getId());
+            roleMenuService.remove(queryWrapper);
+            for (Long menuId : menuIds) {
+                roleMenuService.save(new RoleMenu(role.getId(), menuId));
+            }
+
+        } else {
+            roleMenuService.removeById(role.getId());
         }
         return ResponseResult.okResult();
     }
