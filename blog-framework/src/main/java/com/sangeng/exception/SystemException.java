@@ -9,6 +9,11 @@ public class SystemException extends RuntimeException{
 
     private String msg;
 
+    public SystemException(int code, String errorMessage) {
+        this.code = code;
+        this.msg = errorMessage;
+    }
+
     public int getCode() {
         return code;
     }

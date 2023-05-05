@@ -19,6 +19,7 @@ public enum AppHttpCodeEnum {
     EMAIL_NOT_NULL(511, "邮箱不能为空"),
     NICKNAME_EXIST(512, "昵称已存在"),
     OPERATION_ERROR(513, "操作失败，请稍后再试"),
+    MENU_NAME_ERROR(514, "操作失败，请稍后再试"),
 
     CONTEXT_NOT_NULL(506, "评论不能为空");
 
