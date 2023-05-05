@@ -35,10 +35,10 @@ public class RoleController {
     public ResponseResult updateRole(@RequestBody RoleDto roleDto) {
         return roleService.updateRole(roleDto);
     }
-    //@DeleteMapping("/{id}")
-    //public ResponseResult<Object> deleteRole(@PathVariable Long id) {
-    //    return roleService.deleteRoleById(id);
-    //}
+    @DeleteMapping("/{id}")
+    public ResponseResult deleteRole(@PathVariable Long id) {
+        return roleService.deleteRoleById(id);
+    }
     //@GetMapping("/listAllRole")
     //public ResponseResult<List<SimpleRoleVo>> listAllRole() {
     //    return roleService.getAllRole();

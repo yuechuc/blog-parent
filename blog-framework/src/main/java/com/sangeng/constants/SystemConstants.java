@@ -23,4 +23,5 @@ public class SystemConstants
 
     public static final String ADMAIN = "1";
     public static final Long MENT_PARENT_ID = 0L;
+    public static final Long ADMAIN_ID = 1L;
 }

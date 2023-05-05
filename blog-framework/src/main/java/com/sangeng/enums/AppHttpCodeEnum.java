@@ -22,7 +22,8 @@ public enum AppHttpCodeEnum {
     CHILDREN_NOT_NULL(514, "存在子菜单不允许删除"),
 
     CONTEXT_NOT_NULL(506, "评论不能为空"),
-    ROLE_NOT_EXIT(515, "角色不存在");
+    ROLE_NOT_EXIT(515, "角色不存在"),
+    CAN_NOT_DELETE_ADMIN(516,"该用户不能删除" );
 
     int code;
     String msg;

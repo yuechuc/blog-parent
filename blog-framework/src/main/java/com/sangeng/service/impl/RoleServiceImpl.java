@@ -126,6 +126,16 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         return ResponseResult.okResult();
     }
 
+    @Override
+    public ResponseResult deleteRoleById(Long id) {
+        if (id == SystemConstants.ADMAIN_ID) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.CAN_NOT_DELETE_ADMIN);
+        }
+        roleMenuService.removeById(id);
+        removeById(id);
+        return ResponseResult.okResult();
+    }
+
 
 }
 
