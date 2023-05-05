@@ -14,6 +14,7 @@ import com.sangeng.domain.vo.PageVo;
 import com.sangeng.domain.vo.adminVo.AdminArticleListVo;
 import com.sangeng.domain.vo.adminVo.RoleVo;
 import com.sangeng.enums.AppHttpCodeEnum;
+import com.sangeng.exception.SystemException;
 import com.sangeng.mapper.RoleMapper;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.RoleMenuService;
@@ -126,16 +127,24 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         return ResponseResult.okResult();
     }
 
+    @Transactional
     @Override
-    public ResponseResult deleteRoleById(Long id) {
-        if (id == SystemConstants.ADMAIN_ID) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.CAN_NOT_DELETE_ADMIN);
+    public ResponseResult deleteRoleById(List<Long> ids) {
+        if (ids != null) {
+            for (Long id : ids) {
+                if (id == SystemConstants.ADMAIN_ID) {
+                    return ResponseResult.errorResult(AppHttpCodeEnum.CAN_NOT_DELETE_ADMIN);
+                }
+                LambdaQueryWrapper<RoleMenu> queryWrapper = new LambdaQueryWrapper<>();
+                queryWrapper.eq(RoleMenu::getRoleId, id);
+                roleMenuService.remove(queryWrapper);
+                removeById(id);
+            }
+            return ResponseResult.okResult();
+        } else {
+            throw new SystemException(AppHttpCodeEnum.OPERATION_ERROR);
         }
-        roleMenuService.removeById(id);
-        removeById(id);
-        return ResponseResult.okResult();
+
     }
-
-
 }
 

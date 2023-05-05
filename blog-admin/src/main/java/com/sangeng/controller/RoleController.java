@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/system/role")
 public class RoleController {
@@ -35,9 +37,9 @@ public class RoleController {
     public ResponseResult updateRole(@RequestBody RoleDto roleDto) {
         return roleService.updateRole(roleDto);
     }
-    @DeleteMapping("/{id}")
-    public ResponseResult deleteRole(@PathVariable Long id) {
-        return roleService.deleteRoleById(id);
+    @DeleteMapping("/{ids}")
+    public ResponseResult deleteRole(@PathVariable List<Long> ids) {
+        return roleService.deleteRoleById(ids);
     }
     //@GetMapping("/listAllRole")
     //public ResponseResult<List<SimpleRoleVo>> listAllRole() {
