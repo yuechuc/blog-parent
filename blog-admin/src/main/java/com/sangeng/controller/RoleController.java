@@ -3,7 +3,9 @@ package com.sangeng.controller;
 import com.sangeng.domain.dto.ArticleDto;
 import com.sangeng.domain.dto.RoleDto;
 import com.sangeng.domain.dto.RoleStatusDto;
+import com.sangeng.domain.vo.adminVo.MenuTreeVo;
 import com.sangeng.domain.vo.adminVo.RoleVo;
+import com.sangeng.domain.vo.adminVo.SimpleRoleVo;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +43,8 @@ public class RoleController {
     public ResponseResult deleteRole(@PathVariable List<Long> ids) {
         return roleService.deleteRoleById(ids);
     }
-    //@GetMapping("/listAllRole")
-    //public ResponseResult<List<SimpleRoleVo>> listAllRole() {
-    //    return roleService.getAllRole();
-    //}
+    @GetMapping("/listAllRole")
+    public ResponseResult<List<RoleVo>> listAllRole() {
+        return roleService.getAllRole();
+    }
 }

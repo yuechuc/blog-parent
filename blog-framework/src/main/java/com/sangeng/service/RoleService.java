@@ -2,9 +2,9 @@ package com.sangeng.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sangeng.domain.Role;
-import com.sangeng.domain.dto.ArticleDto;
 import com.sangeng.domain.dto.RoleDto;
 import com.sangeng.domain.vo.adminVo.RoleVo;
+import com.sangeng.domain.vo.adminVo.SimpleRoleVo;
 import com.sangeng.response.ResponseResult;
 
 import java.util.List;
@@ -31,5 +31,7 @@ public interface RoleService extends IService<Role> {
     ResponseResult updateRole(RoleDto roleDto);
 
     ResponseResult deleteRoleById(List<Long> ids);
+
+    ResponseResult<List<RoleVo>> getAllRole();
 }
 

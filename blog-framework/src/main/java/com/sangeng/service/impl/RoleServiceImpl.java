@@ -4,15 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sangeng.constants.SystemConstants;
-import com.sangeng.domain.Article;
-import com.sangeng.domain.Menu;
 import com.sangeng.domain.Role;
 import com.sangeng.domain.RoleMenu;
-import com.sangeng.domain.dto.ArticleDto;
 import com.sangeng.domain.dto.RoleDto;
 import com.sangeng.domain.vo.PageVo;
-import com.sangeng.domain.vo.adminVo.AdminArticleListVo;
 import com.sangeng.domain.vo.adminVo.RoleVo;
+import com.sangeng.domain.vo.adminVo.SimpleRoleVo;
 import com.sangeng.enums.AppHttpCodeEnum;
 import com.sangeng.exception.SystemException;
 import com.sangeng.mapper.RoleMapper;
@@ -24,12 +21,10 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * 角色信息表(Role)表服务实现类
@@ -145,6 +140,15 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             throw new SystemException(AppHttpCodeEnum.OPERATION_ERROR);
         }
 
+    }
+
+    @Override
+    public ResponseResult<List<RoleVo>> getAllRole() {
+        LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Role::getStatus,SystemConstants.STATUS_NORMAL);
+        List<Role> roleList = list(queryWrapper);
+        List<RoleVo> roleVoList = BeanCopyUtils.copyBeanList(roleList, RoleVo.class);
+        return ResponseResult.okResult(roleVoList);
     }
 }
 
