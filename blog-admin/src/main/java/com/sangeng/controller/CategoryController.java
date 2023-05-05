@@ -31,6 +31,7 @@ public class CategoryController {
         return categoryService.listAllCategory();
     }
 
+    //导出分类Excel
     @PreAuthorize("@perms.hasPermission('content:category:export')")
     @GetMapping("/export")
     public void export(HttpServletResponse response){
@@ -54,5 +55,7 @@ public class CategoryController {
             WebUtils.renderString(response, JSON.toJSONString(result));
         }
     }
+
+
 
 }
