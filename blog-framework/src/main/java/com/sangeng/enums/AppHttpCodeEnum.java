@@ -21,7 +21,8 @@ public enum AppHttpCodeEnum {
     OPERATION_ERROR(513, "操作失败，请稍后再试"),
     CHILDREN_NOT_NULL(514, "存在子菜单不允许删除"),
 
-    CONTEXT_NOT_NULL(506, "评论不能为空");
+    CONTEXT_NOT_NULL(506, "评论不能为空"),
+    ROLE_NOT_EXIT(515, "角色不存在");
 
     int code;
     String msg;
