@@ -1,6 +1,7 @@
 package com.sangeng.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sangeng.domain.LoginUser;
@@ -17,6 +18,7 @@ import com.sangeng.service.UserRoleService;
 import com.sangeng.service.UserService;
 import com.sangeng.utils.BeanCopyUtils;
 import com.sangeng.domain.vo.UserInfo;
+import com.sangeng.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,6 +148,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             userRoleService.save(userRole);
         }
 
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult deleteUserById(Long id) {
+        if (SecurityUtils.getUserId().equals(id)){
+            throw new SystemException(AppHttpCodeEnum.CAN_NOT_DELETE_LOGIN_USER);
+        }
+        removeById(id);
+
+        LambdaQueryWrapper<UserRole> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserRole::getUserId,id);
+        userRoleService.remove(queryWrapper);
         return ResponseResult.okResult();
     }
 

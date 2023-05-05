@@ -32,11 +32,11 @@ public class UserController {
     public ResponseResult addUser(@RequestBody AdminUserDto adminUserDto){
         return userService.addUser(adminUserDto);
     }
-    //
-    //@DeleteMapping("/{id}")
-    //public ResponseResult<Object> deleteUser(@PathVariable Long id){
-    //    return userService.deleteUserById(id);
-    //}
+
+    @DeleteMapping("/{id}")
+    public ResponseResult deleteUser(@PathVariable Long id){
+        return userService.deleteUserById(id);
+    }
     //
     //@GetMapping("/{id}")
     //public ResponseResult<UpdateUserVo> getUserInfo(@PathVariable Long id){

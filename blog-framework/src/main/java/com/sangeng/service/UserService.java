@@ -25,5 +25,7 @@ public interface UserService extends IService<User> {
     ResponseResult getUserListByPage(Integer pageNum, Integer pageSize, AdminUserDto userDto);
 
     ResponseResult addUser(AdminUserDto adminUserDto);
+
+    ResponseResult deleteUserById(Long id);
 }
 
