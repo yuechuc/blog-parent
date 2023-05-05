@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.sangeng.domain.dto.AdminUserDto;
 import com.sangeng.domain.dto.UserDto;
 import com.sangeng.domain.User;
+import com.sangeng.domain.vo.adminVo.UpdateUserVo;
 import com.sangeng.response.ResponseResult;
 
 
@@ -27,5 +28,9 @@ public interface UserService extends IService<User> {
     ResponseResult addUser(AdminUserDto adminUserDto);
 
     ResponseResult deleteUserById(Long id);
+
+    UpdateUserVo getUserInfoById(Long id);
+
+    ResponseResult updateUser(AdminUserDto userDto);
 }
 

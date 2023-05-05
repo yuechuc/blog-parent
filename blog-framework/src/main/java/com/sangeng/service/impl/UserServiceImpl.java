@@ -9,6 +9,8 @@ import com.sangeng.domain.UserRole;
 import com.sangeng.domain.dto.AdminUserDto;
 import com.sangeng.domain.dto.UserDto;
 import com.sangeng.domain.vo.PageVo;
+import com.sangeng.domain.vo.adminVo.UpdateUserInfoVo;
+import com.sangeng.domain.vo.adminVo.UpdateUserVo;
 import com.sangeng.domain.vo.adminVo.UserVo;
 import com.sangeng.enums.AppHttpCodeEnum;
 import com.sangeng.exception.SystemException;
@@ -161,6 +163,38 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         LambdaQueryWrapper<UserRole> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(UserRole::getUserId,id);
         userRoleService.remove(queryWrapper);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public UpdateUserVo getUserInfoById(Long id) {
+        User user = getById(id);
+        UpdateUserInfoVo updateUserInfoVo = BeanCopyUtils.copyBean(user, UpdateUserInfoVo.class);
+        UpdateUserVo updateUserVo = new UpdateUserVo();
+        updateUserVo.setUser(updateUserInfoVo);
+        List<Long> roleIds = baseMapper.getRoleIdsByUserId(id);
+        updateUserVo.setRoleIds(roleIds);
+        return updateUserVo;
+    }
+
+    @Override
+    public ResponseResult updateUser(AdminUserDto userDto) {
+        //待优化
+        User nowUser = getById(userDto.getId());
+        if (!nowUser.getUserName().equals(userDto.getUserName())&&userNameExist(userDto.getUserName()))
+            throw new SystemException(AppHttpCodeEnum.USERNAME_EXIST);
+        if (!nowUser.getEmail().equals(userDto.getEmail())&&emailExist(userDto.getEmail()))
+            throw new SystemException(AppHttpCodeEnum.EMAIL_EXIST);
+        User user=BeanCopyUtils.copyBean(userDto,User.class);
+        updateById(user);
+
+        LambdaQueryWrapper<UserRole> userRoleLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userRoleLambdaQueryWrapper.eq(UserRole::getUserId,user.getId());
+        userRoleService.remove(userRoleLambdaQueryWrapper);
+        List<Long> roleIds = userDto.getRoleIds();
+        for (Long roleId : roleIds) {
+            userRoleService.save(new UserRole(user.getId(),roleId));
+        }
         return ResponseResult.okResult();
     }
 

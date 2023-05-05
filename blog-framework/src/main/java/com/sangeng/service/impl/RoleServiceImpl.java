@@ -150,5 +150,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         List<RoleVo> roleVoList = BeanCopyUtils.copyBeanList(roleList, RoleVo.class);
         return ResponseResult.okResult(roleVoList);
     }
+
+    @Override
+    public ResponseResult<List<SimpleRoleVo>> getAll() {
+        List<Role> roleList = list();
+        List<SimpleRoleVo> simpleRoleVoList = BeanCopyUtils.copyBeanList(roleList, SimpleRoleVo.class);
+        return ResponseResult.okResult(simpleRoleVoList);
+    }
 }
 
