@@ -2,11 +2,15 @@ package com.sangeng.controller;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.sangeng.domain.Category;
+import com.sangeng.domain.Tag;
+import com.sangeng.domain.dto.AddCategoryDto;
 import com.sangeng.domain.dto.CategoryQueryDto;
 import com.sangeng.domain.dto.TagDto;
 import com.sangeng.domain.vo.ExcelCategoryVo;
 import com.sangeng.enums.AppHttpCodeEnum;
+import com.sangeng.exception.SystemException;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.CategoryService;
 import com.sangeng.service.TagService;
@@ -14,9 +18,8 @@ import com.sangeng.utils.BeanCopyUtils;
 import com.sangeng.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -28,17 +31,17 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/listAllCategory")
-    public ResponseResult listAllCategory(){
+    public ResponseResult listAllCategory() {
         return categoryService.listAllCategory();
     }
 
     //导出分类Excel
     @PreAuthorize("@perms.hasPermission('content:category:export')")
     @GetMapping("/export")
-    public void export(HttpServletResponse response){
+    public void export(HttpServletResponse response) {
         try {
             //设置下载文件的请求头
-            WebUtils.setDownLoadHeader("分类.xlsx",response);
+            WebUtils.setDownLoadHeader("分类.xlsx", response);
             //获取需要导出的数据
             List<Category> categoryVos = categoryService.list();
 
@@ -58,8 +61,23 @@ public class CategoryController {
     }
 
     @GetMapping("/list")
-    public ResponseResult list(Integer pageNum, Integer pageSize, CategoryQueryDto categoryQueryDto){
-        return categoryService.list(pageNum,pageSize,categoryQueryDto);
+    public ResponseResult list(Integer pageNum, Integer pageSize, CategoryQueryDto categoryQueryDto) {
+        return categoryService.list(pageNum, pageSize, categoryQueryDto);
     }
 
+    @Transactional
+    @PostMapping
+    public ResponseResult addTag(@RequestBody AddCategoryDto addCategoryDto) {
+        Category category = BeanCopyUtils.copyBean(addCategoryDto, Category.class);
+        LambdaQueryWrapper<Category> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Category::getName, addCategoryDto.getName());
+        List<Category> list = categoryService.list(wrapper);
+        if (list == null) {
+            categoryService.save(category);
+            return ResponseResult.okResult();
+        } else {
+            //重名，数据还没设计唯一约束
+            throw new SystemException(AppHttpCodeEnum.CATEGORY_NAME_EXIST);
+        }
+    }
 }

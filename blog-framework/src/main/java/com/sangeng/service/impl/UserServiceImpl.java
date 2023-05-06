@@ -204,7 +204,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public ResponseResult changeStatus(String status, Long id) {
         User user = getById(id);
         if (Objects.isNull(user)) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.USER_NOT_EXIT);
+            return ResponseResult.errorResult(AppHttpCodeEnum.USER_NOT_EXIST);
         }
         user.setStatus(status);
         updateById(user);

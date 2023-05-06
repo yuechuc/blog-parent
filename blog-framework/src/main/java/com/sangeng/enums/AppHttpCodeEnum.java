@@ -24,7 +24,9 @@ public enum AppHttpCodeEnum {
     CONTEXT_NOT_NULL(506, "评论不能为空"),
     ROLE_NOT_EXIT(515, "角色不存在"),
     CAN_NOT_DELETE_ADMIN(516,"超级管理员不能删除" ),
-    CAN_NOT_DELETE_LOGIN_USER(517,"不能删除登录用户" ), USER_NOT_EXIT(518,"用户不存在" );
+    CAN_NOT_DELETE_LOGIN_USER(517,"不能删除登录用户" ),
+    CATEGORY_NAME_EXIST(519,"分类已存在" ),
+    USER_NOT_EXIST(518,"用户不存在" );
 
     int code;
     String msg;
