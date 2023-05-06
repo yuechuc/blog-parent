@@ -59,6 +59,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
         //必须是正式文章
         queryWrapper.eq(Article::getStatus, ARTICLE_STATUS_NORMAL);
+
         //按照浏览量进行排序
         queryWrapper.orderByDesc(Article::getViewCount);
         //最多只查询10条
@@ -66,6 +67,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         page(page, queryWrapper);
 
         List<Article> articles = page.getRecords();
+
+        for (Article article : articles) {
+            Long id = article.getId();
+            //从redis中获取viewCount
+            Integer viewCount = redisCache.getCacheMapValue(RedisKey.ARTICLE_VIEWCOUNT, id.toString());
+            article.setViewCount(viewCount.longValue());
+        }
         //bean拷贝
         List<HotArticleVo> hotArticleVos = BeanCopyUtils.copyBeanList(articles, HotArticleVo.class);
 

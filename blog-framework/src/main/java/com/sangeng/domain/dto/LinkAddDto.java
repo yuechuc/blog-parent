@@ -1,17 +1,13 @@
-package com.sangeng.domain.vo;
+package com.sangeng.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-import java.util.List;
-
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class LinkVo {
-    private Long id;
+@NoArgsConstructor
+public class LinkAddDto {
     private String name;
     private String logo;
     private String description;

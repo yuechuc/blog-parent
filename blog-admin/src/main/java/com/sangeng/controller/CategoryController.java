@@ -79,7 +79,7 @@ public class CategoryController {
             return ResponseResult.okResult();
         } else {
             //重名，数据还没设计唯一约束
-            throw new SystemException(AppHttpCodeEnum.CATEGORY_NAME_EXIST);
+            throw new SystemException(AppHttpCodeEnum.NAME_EXIST);
         }
     }
 

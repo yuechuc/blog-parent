@@ -33,11 +33,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         //返回用户信息
         //是管理员，查询权限信息封装
+        //如果查到了用户，就封装成UserDetails返回,之后的校验逻辑不需要我们去写。
+        //如果是后台账号（type为1），就查询出用户的权限信息，然后封装到LoginUser中。
         if (user.getType().equals(SystemConstants.ADMAIN)){
+            //根据用户id查询用户的权限信息
             List<String> perms = menuMapper.selectPermsByUserId(user.getId());
             return new LoginUser(user,perms);
+        }else {
+            //如果是前台账号（type为0），就直接返回LoginUser。
+            return new LoginUser(user, null);
         }
-        //不是直接返回
-        return new LoginUser(user,null);
     }
 }
