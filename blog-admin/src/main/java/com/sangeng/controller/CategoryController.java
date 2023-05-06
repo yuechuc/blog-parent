@@ -3,6 +3,7 @@ package com.sangeng.controller;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.sangeng.domain.Category;
 import com.sangeng.domain.Tag;
 import com.sangeng.domain.dto.AddCategoryDto;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -67,17 +69,28 @@ public class CategoryController {
 
     @Transactional
     @PostMapping
-    public ResponseResult addTag(@RequestBody AddCategoryDto addCategoryDto) {
+    public ResponseResult addCategory(@RequestBody AddCategoryDto addCategoryDto) {
         Category category = BeanCopyUtils.copyBean(addCategoryDto, Category.class);
         LambdaQueryWrapper<Category> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Category::getName, addCategoryDto.getName());
         List<Category> list = categoryService.list(wrapper);
-        if (list == null) {
+        if (CollectionUtils.isEmpty(list)) {
             categoryService.save(category);
             return ResponseResult.okResult();
         } else {
             //重名，数据还没设计唯一约束
             throw new SystemException(AppHttpCodeEnum.CATEGORY_NAME_EXIST);
+        }
+    }
+
+
+    @Transactional
+    @DeleteMapping("/{ids}")
+    public ResponseResult deleteCategoryById(@PathVariable List<Long> ids){
+        if (categoryService.removeByIds(ids)){
+            return ResponseResult.okResult();
+        }else {
+            throw new SystemException(AppHttpCodeEnum.OPERATION_ERROR);
         }
     }
 }
