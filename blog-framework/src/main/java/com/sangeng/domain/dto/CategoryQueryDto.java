@@ -1,14 +1,15 @@
-package com.sangeng.domain.vo;
+package com.sangeng.domain.dto;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class CategoryVo {
-    private Long id;
+@NoArgsConstructor
+public class CategoryQueryDto {
     private String name;
-    private String description;
     private String status;
+
 }

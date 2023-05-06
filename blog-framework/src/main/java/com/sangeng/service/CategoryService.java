@@ -2,6 +2,8 @@ package com.sangeng.service;
 
 import com.sangeng.domain.Category;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sangeng.domain.dto.CategoryQueryDto;
+import com.sangeng.domain.dto.TagDto;
 import com.sangeng.response.ResponseResult;
 
 /**
@@ -14,4 +16,6 @@ public interface CategoryService extends IService<Category> {
     ResponseResult getCategoryList();
 
     ResponseResult listAllCategory();
+
+    ResponseResult list(Integer pageNum, Integer pageSize, CategoryQueryDto categoryQueryDto);
 }

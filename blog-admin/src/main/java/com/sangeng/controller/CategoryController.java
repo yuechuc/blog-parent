@@ -3,6 +3,7 @@ package com.sangeng.controller;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import com.sangeng.domain.Category;
+import com.sangeng.domain.dto.CategoryQueryDto;
 import com.sangeng.domain.dto.TagDto;
 import com.sangeng.domain.vo.ExcelCategoryVo;
 import com.sangeng.enums.AppHttpCodeEnum;
@@ -56,6 +57,9 @@ public class CategoryController {
         }
     }
 
-
+    @GetMapping("/list")
+    public ResponseResult list(Integer pageNum, Integer pageSize, CategoryQueryDto categoryQueryDto){
+        return categoryService.list(pageNum,pageSize,categoryQueryDto);
+    }
 
 }

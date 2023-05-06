@@ -1,10 +1,13 @@
 package com.sangeng.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sangeng.constants.SystemConstants;
 import com.sangeng.domain.Article;
 import com.sangeng.domain.Category;
+import com.sangeng.domain.dto.CategoryQueryDto;
+import com.sangeng.domain.vo.PageVo;
 import com.sangeng.response.ResponseResult;
 import com.sangeng.service.ArticleService;
 import com.sangeng.service.CategoryService;
@@ -13,6 +16,7 @@ import com.sangeng.utils.BeanCopyUtils;
 import com.sangeng.domain.vo.CategoryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -31,6 +35,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>
 
     @Autowired
     private ArticleService articleService;
+
+
 
     @Override
     public ResponseResult getCategoryList() {
@@ -62,6 +68,22 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>
         List<CategoryVo> categoryVos = BeanCopyUtils.copyBeanList(list, CategoryVo.class);
 
         return ResponseResult.okResult(categoryVos);
+    }
+
+    @Override
+    public ResponseResult list(Integer pageNum, Integer pageSize, CategoryQueryDto categoryQueryDto) {
+        LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .eq(StringUtils.hasText(categoryQueryDto.getName()),Category::getName,categoryQueryDto.getName())
+                .eq(StringUtils.hasText(categoryQueryDto.getStatus()),Category::getStatus,categoryQueryDto.getStatus())
+                .orderByDesc(Category::getUpdateTime);
+
+        Page<Category> page  = new Page<>(pageNum, pageSize);
+        Page<Category> categoryPage = this.page(page, queryWrapper);
+
+        List<CategoryVo> categoryVos = BeanCopyUtils.copyBeanList(categoryPage.getRecords(), CategoryVo.class);
+        PageVo pageVo = new PageVo(categoryVos, categoryPage.getTotal());
+        return ResponseResult.okResult(pageVo);
     }
 
 
